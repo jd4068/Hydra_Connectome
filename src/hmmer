@@ -1,0 +1,28 @@
+
+
+# default parameters
+EVALUE_HMM=1e-10
+HMM="/path/to/PF00001.hmm"
+PROTEOME="/path/to/hydra_proteome.fasta"
+OUTDIR="/path/to/results"
+
+# === Create output directories ===
+mkdir -p "$OUTDIR/tmp"
+
+# === Run hmmsearch ===
+HMMSEARCH_TBL="$OUTDIR/tmp/hmmsearch.tbl"
+HMMSEARCH_DOM="$OUTDIR/tmp/hmmsearch.domtbl"
+
+echo "Running hmmsearch (E<= $EVALUE_HMM)..."
+hmmsearch \
+  --tblout "$HMMSEARCH_TBL" \
+  --domtblout "$HMMSEARCH_DOM" \
+  --cpu 4 \
+  -E "$EVALUE_HMM" \
+  "$HMM" \
+  "$PROTEOME" > "$OUTDIR/tmp/hmmsearch.full.log" 2>&1
+
+echo "✅ hmmsearch finished!"
+echo "Results:"
+echo "  - Table output: $HMMSEARCH_TBL"
+echo "  - Domain output: $HMMSEARCH_DOM"
