@@ -1,4 +1,5 @@
-
+#!/bin/bash
+set -e
 
 # default parameters
 EVALUE_HMM=1e-10
@@ -26,3 +27,6 @@ echo "✅ hmmsearch finished!"
 echo "Results:"
 echo "  - Table output: $HMMSEARCH_TBL"
 echo "  - Domain output: $HMMSEARCH_DOM"
+#remove redundant hits 
+cd-hit -i hydra_hits.fasta -o hydra_hits_nr.fasta -c 0.95
+
