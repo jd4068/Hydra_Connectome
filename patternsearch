@@ -1,0 +1,21 @@
+#!/bin/bash
+set -e
+
+# === User-defined variables ===
+TRANSCRIPTOME="/path/to/input_transcriptome.fasta"   # your original Hydra transcriptome
+OUTDIR="/path/to/output_dir"
+SIGNALP_PATH="/path/to/signalp-4.1"                  # path to SignalP installation
+
+# Create output directory
+mkdir -p "$OUTDIR"
+
+# === STEP 2: Pattern-based search for neuropeptide precursors ===
+echo "Running pattern search for amidation and dibasic cleavage motifs..."
+
+grep -E -B 1 \
+  -e "((.{2,25}G[KR][KR])|(.{2,25}[KR](.{1}|.{3}|.{5})G[KR*])){3,}" \
+  -e "(.{5,25}[KR][KR]){5,}" \
+  "/path/to/input_transcriptome.fasta" | grep -E -v "^--$" > "$OUTDIR/pattern_hits.fasta"
+
+echo "✅ Pattern search completed."
+echo "Results saved to: $OUTDIR/pattern_hits.fasta"
